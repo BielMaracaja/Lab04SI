@@ -1,0 +1,66 @@
+h2{
+    text-align: center;
+    color: darkolivegreen;
+    font-family: Calibri;
+    font-size: 50px;
+}
+
+h4{
+    color: black;
+    font-family: Georgia;
+    font-size: 20px;
+}
+
+.jumbotron{
+    background-color: #f6d4f7;
+    width: 700px;
+    text-align: center;
+    margin-top: 20px    ;
+    margin-left: auto;
+    margin-right: auto;
+}
+.table{
+    margin-top: 30px;
+}
+.form-control{
+    text-align: left;
+    margin-top: 2px;
+    margin-bottom: 5px;
+
+}
+.selecionado{
+    color: #fffdff;
+    background-color: #ff0008;
+}
+.riscado{
+    text-decoration: line-through;
+    font-weight: bolder;
+}
+
+.caixaNovaLista{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.alta{
+    color: red;
+    font-weight: bolder;
+    font-color: black;
+}
+
+.media{
+    color: yellow;
+    font-weight: bolder;
+    font-color: black;
+
+}
+
+.baixa{
+    color: green;
+    font-weight: bolder;
+    font-color: black;
+}
+
+.centraliza{
+    text-align: center;
+}

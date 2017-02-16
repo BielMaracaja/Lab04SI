@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html ng-app="listaDeTarefas">
+
+<head>
+
+    <meta charset="UTF-8"/>
+    <title>Lista de Tarefas</title>
+
+    <link rel="stylesheet" type="text/css" href="css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="css/cyborg.css"/>
+    <link rel="stylesheet" type="text/css" href="/./static/css/cyborg.css"/>
+    <link rel="stylesheet" type="text/css" href="/./static/css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="js/bootstrap/bootstrap .css"/>
+
+    <script src="js/lib/baixar/pdfmake.min.js"></script>
+    <script src="js/lib/baixar/vfs_fonts.js"></script>
+    <script src="js/lib/jquery/jquery.js"></script>
+    <script src="js/lib/bootstrap/bootstrap.js"></script>
+    <script src="js/lib/angular/angular.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controller/controller.js"></script>
+
+</head>
+
+<body ng-controller="listaDeTarefasCtrl">
+
+<ul class="nav nav-pills nav-stacked">
+    <li><a href="https://github.com/BielMaracaja">GitHub</a></li>
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            Listas de Tarefas<span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li><a href="#" ng-repeat="lista in listaTarefas" ng-click="mudaListaTarefas(lista)">{{lista.nome}}</a></li>
+            <button class="btn btn-danger" ng-click="ExcluirTodasAsListas()">Deletar Todas as Listas</button>
+        </ul>
+    </li>
+    <button class="btn btn-default btn-lg button" id="baixarLista">Baixar Lista</button>
+
+</ul>
+
+<div class="center-block caixaNovaLista" style="text-align: center">
+    <h3>Adicione sua Lista:</h3>
+    <input class="form-control" style="width: 500px; margin: 0 auto" type="text"  ng-model="ListaDeTarefa.nome" placeholder="Nome da Lista"/>
+    <button class="btn btn-success" ng-click="addNaLista(ListaDeTarefa)">Adicionar Lista</button>
+    <button class="btn btn-warning" ng-click="excluirListaTarefas(ListaDeTarefa)">Excluir Lista</button>
+</div>
+
+
+<div ng-show ="contemLista()">
+<button class="btn btn-primary btn-lg" ng-click="" data-toggle="modal" data-target="#modalAddTarefa">Adicionar Tarefa</button>
+<div class="modal" id="modalAddTarefa">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Tarefa:</h4>
+            </div>
+
+            <div class="form-group">
+                <label for="inputNome" class="col-lg-2 control-label">Nome:</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" ng-model="tarefa.nome" id="inputNome" placeholder="Digite o Nome:"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="textArea" class="col-lg-2 control-label">Descrição:</label>
+                <div class="col-lg-10">
+                    <textarea class="form-control" rows="3" ng-model="tarefa.descricao  " id="textArea">Dê uma descrição a sua tarefa:</textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="select" class="col-lg-2 control-label">Prioridade:</label>
+                <div class="col-lg-10">
+                    <select class="form-control" id="select" ng-model="tarefa.prioridade" ng-options="prioridade for prioridade in prioridades">
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputCategoria" class="col-lg-2 control-label">Categoria:</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputCategoria" ng-model="tarefa.categoria" placeholder="Digite a categoria:"/>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">cancelar</button>
+                <button type="button" class="btn btn-primary" ng-click="addTarefa(tarefa)">Salvar</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="center-block container text-center">
+    <h2>{{listaMomento.nome}}</h2>
+    <h4>{{'Quantidade de Tarefas: ' + retornaTarefas()}}</h4>
+    <h4>{{'Tarefas Realizadas: ' + tarefasRealizadas()}}</h4>
+
+    <div class="progress progress-striped active">
+        <div class="progress-bar" ng-style="{width : ( barraDePorcentagem() + '%' ) }">
+            {{barraDePorcentagem() + '%'}}
+        </div>
+    </div>
+    
+    <table class="table">
+        <tr>
+            <td></td>
+            <td>Nome da tarefa:</td>
+            <td>Descrição:</td>
+            <td>Prioridade:</td>
+            <td>Categoria:</td>
+        </tr>
+        <tr ng-class="{'alta' : tarefa.prioridade === 'ALTA', 'media' : tarefa.prioridade === 'MEDIA', 'baixa' : tarefa.prioridade === 'BAIXA'  }" ng-repeat="tarefa in listaMomento.tarefas">
+            <td><a href="#" class="btn btn-info" ng-click="marcarConcluida(tarefa)">Concluida</a></td>
+            <td>{{tarefa.nome}}</td>
+            <td>{{tarefa.descricao}}</td>
+            <td>{{tarefa.prioridade}}</td>
+            <td>{{tarefa.categoria}}</td>
+            <td><a href="#" class="btn btn-warning">Excluir</a></td>
+            <td><a href="#" class="btn btn-primary btn-xs" ng-click="" data-toggle="modal" data-target="#modalSubtarefa">Editar</a></td>
+        </tr>
+    </table>
+
+    <button class="btn btn-danger" ng-click="limparTarefas()">Apagar Todas as Tarefas</button>
+
+    <div class="modal" id="modalSubtarefa">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Adicionar Subtarefas</h4>
+                </div>
+
+                <tr>
+                    <div class="form-group">
+                        <label for="inputSubTarefa" class="col-lg-2 control-label">Nome Subtarefa:</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control" id="inputSubTarefa" ng-model="subTarefa.nome" placeholder="Digite o nome da SubTarefa:"/>
+                            <a href="#" class="btn btn-warning centraliza" ng-click="">Add SubTarefa</a>
+                        </div>
+                    </div>
+                </tr>
+
+                <table class="table">
+                    <td>
+                        <td></td>
+                        <td>Nome da SubTarefa:</td>
+                    </td>
+                    <td ng-class= "">
+                        <td>{{subtarefa.nome}}</td>
+                    </td>
+                </table>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">cancelar</button>
+                    <button type="button" class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+</body>
+</html>
